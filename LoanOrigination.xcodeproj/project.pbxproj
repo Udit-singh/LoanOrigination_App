@@ -7,31 +7,27 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2595882D5ECCD0A4A08B9396 /* Pods_LoanOrigination.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77A06B6CF846D1685BF63B51 /* Pods_LoanOrigination.framework */; };
 		9801FF492BEFA74000198FC1 /* LoanOriginationApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9801FF482BEFA74000198FC1 /* LoanOriginationApp.swift */; };
 		9801FF4B2BEFA74000198FC1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9801FF4A2BEFA74000198FC1 /* ContentView.swift */; };
 		9801FF4D2BEFA74200198FC1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9801FF4C2BEFA74200198FC1 /* Assets.xcassets */; };
 		9801FF502BEFA74200198FC1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9801FF4F2BEFA74200198FC1 /* Preview Assets.xcassets */; };
-		9801FF572BEFA77A00198FC1 /* LoanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9801FF562BEFA77A00198FC1 /* LoanView.swift */; };
 		9801FF592BEFA88A00198FC1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9801FF582BEFA88A00198FC1 /* GoogleService-Info.plist */; };
-		9801FF5C2BEFA99E00198FC1 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 9801FF5B2BEFA99E00198FC1 /* FirebaseAnalytics */; };
-		9801FF5E2BEFA99E00198FC1 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 9801FF5D2BEFA99E00198FC1 /* FirebaseAnalyticsOnDeviceConversion */; };
-		9801FF602BEFA99E00198FC1 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 9801FF5F2BEFA99E00198FC1 /* FirebaseAnalyticsSwift */; };
-		9801FF622BEFA99E00198FC1 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 9801FF612BEFA99E00198FC1 /* FirebaseAnalyticsWithoutAdIdSupport */; };
-		9801FF642BEFA99E00198FC1 /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 9801FF632BEFA99E00198FC1 /* FirebaseAppCheck */; };
+		98597B3C2BEFF94600C7FB07 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 98597B3B2BEFF94600C7FB07 /* FirebaseAnalytics */; };
+		98597B3E2BEFF94600C7FB07 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 98597B3D2BEFF94600C7FB07 /* FirebaseAnalyticsOnDeviceConversion */; };
+		98597B402BEFF94600C7FB07 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 98597B3F2BEFF94600C7FB07 /* FirebaseAnalyticsSwift */; };
+		98597B422BEFF94600C7FB07 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 98597B412BEFF94600C7FB07 /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		98597B442BEFF94600C7FB07 /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 98597B432BEFF94600C7FB07 /* FirebaseAppCheck */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		70216B73BD54E34BD4D4B5A9 /* Pods-LoanOrigination.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LoanOrigination.release.xcconfig"; path = "Target Support Files/Pods-LoanOrigination/Pods-LoanOrigination.release.xcconfig"; sourceTree = "<group>"; };
-		77A06B6CF846D1685BF63B51 /* Pods_LoanOrigination.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LoanOrigination.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9801FF452BEFA74000198FC1 /* LoanOrigination.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LoanOrigination.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9801FF482BEFA74000198FC1 /* LoanOriginationApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoanOriginationApp.swift; sourceTree = "<group>"; };
 		9801FF4A2BEFA74000198FC1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		9801FF4C2BEFA74200198FC1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9801FF4F2BEFA74200198FC1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		9801FF562BEFA77A00198FC1 /* LoanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoanView.swift; sourceTree = "<group>"; };
 		9801FF582BEFA88A00198FC1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
-		B88C9AE0A6A28C5CC073B2C1 /* Pods-LoanOrigination.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LoanOrigination.debug.xcconfig"; path = "Target Support Files/Pods-LoanOrigination/Pods-LoanOrigination.debug.xcconfig"; sourceTree = "<group>"; };
+		9801FF652BEFB73400198FC1 /* libfire3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libfire3.tbd; path = usr/lib/libfire3.tbd; sourceTree = SDKROOT; };
+		9801FF922BEFBA9F00198FC1 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,12 +35,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9801FF602BEFA99E00198FC1 /* FirebaseAnalyticsSwift in Frameworks */,
-				9801FF5C2BEFA99E00198FC1 /* FirebaseAnalytics in Frameworks */,
-				9801FF5E2BEFA99E00198FC1 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
-				9801FF642BEFA99E00198FC1 /* FirebaseAppCheck in Frameworks */,
-				9801FF622BEFA99E00198FC1 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
-				2595882D5ECCD0A4A08B9396 /* Pods_LoanOrigination.framework in Frameworks */,
+				98597B402BEFF94600C7FB07 /* FirebaseAnalyticsSwift in Frameworks */,
+				98597B3C2BEFF94600C7FB07 /* FirebaseAnalytics in Frameworks */,
+				98597B3E2BEFF94600C7FB07 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
+				98597B442BEFF94600C7FB07 /* FirebaseAppCheck in Frameworks */,
+				98597B422BEFF94600C7FB07 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,7 +49,8 @@
 		3DB4909BA2CEBE4C2A939E72 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				77A06B6CF846D1685BF63B51 /* Pods_LoanOrigination.framework */,
+				9801FF922BEFBA9F00198FC1 /* Accelerate.framework */,
+				9801FF652BEFB73400198FC1 /* libfire3.tbd */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -85,7 +81,6 @@
 				9801FF4A2BEFA74000198FC1 /* ContentView.swift */,
 				9801FF4C2BEFA74200198FC1 /* Assets.xcassets */,
 				9801FF4E2BEFA74200198FC1 /* Preview Content */,
-				9801FF562BEFA77A00198FC1 /* LoanView.swift */,
 			);
 			path = LoanOrigination;
 			sourceTree = "<group>";
@@ -101,10 +96,7 @@
 		DE08540D04D4203F180009AE /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				B88C9AE0A6A28C5CC073B2C1 /* Pods-LoanOrigination.debug.xcconfig */,
-				70216B73BD54E34BD4D4B5A9 /* Pods-LoanOrigination.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -115,11 +107,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9801FF532BEFA74200198FC1 /* Build configuration list for PBXNativeTarget "LoanOrigination" */;
 			buildPhases = (
-				7E2733A04384F6AD246823EC /* [CP] Check Pods Manifest.lock */,
 				9801FF412BEFA74000198FC1 /* Sources */,
 				9801FF422BEFA74000198FC1 /* Frameworks */,
 				9801FF432BEFA74000198FC1 /* Resources */,
-				7F060305C1D5C9548A4E4588 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -127,11 +117,11 @@
 			);
 			name = LoanOrigination;
 			packageProductDependencies = (
-				9801FF5B2BEFA99E00198FC1 /* FirebaseAnalytics */,
-				9801FF5D2BEFA99E00198FC1 /* FirebaseAnalyticsOnDeviceConversion */,
-				9801FF5F2BEFA99E00198FC1 /* FirebaseAnalyticsSwift */,
-				9801FF612BEFA99E00198FC1 /* FirebaseAnalyticsWithoutAdIdSupport */,
-				9801FF632BEFA99E00198FC1 /* FirebaseAppCheck */,
+				98597B3B2BEFF94600C7FB07 /* FirebaseAnalytics */,
+				98597B3D2BEFF94600C7FB07 /* FirebaseAnalyticsOnDeviceConversion */,
+				98597B3F2BEFF94600C7FB07 /* FirebaseAnalyticsSwift */,
+				98597B412BEFF94600C7FB07 /* FirebaseAnalyticsWithoutAdIdSupport */,
+				98597B432BEFF94600C7FB07 /* FirebaseAppCheck */,
 			);
 			productName = LoanOrigination;
 			productReference = 9801FF452BEFA74000198FC1 /* LoanOrigination.app */;
@@ -186,48 +176,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		7E2733A04384F6AD246823EC /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-LoanOrigination-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		7F060305C1D5C9548A4E4588 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-LoanOrigination/Pods-LoanOrigination-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-LoanOrigination/Pods-LoanOrigination-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LoanOrigination/Pods-LoanOrigination-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		9801FF412BEFA74000198FC1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -235,7 +183,6 @@
 			files = (
 				9801FF4B2BEFA74000198FC1 /* ContentView.swift in Sources */,
 				9801FF492BEFA74000198FC1 /* LoanOriginationApp.swift in Sources */,
-				9801FF572BEFA77A00198FC1 /* LoanView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,7 +310,6 @@
 		};
 		9801FF542BEFA74200198FC1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B88C9AE0A6A28C5CC073B2C1 /* Pods-LoanOrigination.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -393,7 +339,6 @@
 		};
 		9801FF552BEFA74200198FC1 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 70216B73BD54E34BD4D4B5A9 /* Pods-LoanOrigination.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -456,27 +401,27 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		9801FF5B2BEFA99E00198FC1 /* FirebaseAnalytics */ = {
+		98597B3B2BEFF94600C7FB07 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9801FF5A2BEFA99E00198FC1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalytics;
 		};
-		9801FF5D2BEFA99E00198FC1 /* FirebaseAnalyticsOnDeviceConversion */ = {
+		98597B3D2BEFF94600C7FB07 /* FirebaseAnalyticsOnDeviceConversion */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9801FF5A2BEFA99E00198FC1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalyticsOnDeviceConversion;
 		};
-		9801FF5F2BEFA99E00198FC1 /* FirebaseAnalyticsSwift */ = {
+		98597B3F2BEFF94600C7FB07 /* FirebaseAnalyticsSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9801FF5A2BEFA99E00198FC1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalyticsSwift;
 		};
-		9801FF612BEFA99E00198FC1 /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+		98597B412BEFF94600C7FB07 /* FirebaseAnalyticsWithoutAdIdSupport */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9801FF5A2BEFA99E00198FC1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalyticsWithoutAdIdSupport;
 		};
-		9801FF632BEFA99E00198FC1 /* FirebaseAppCheck */ = {
+		98597B432BEFF94600C7FB07 /* FirebaseAppCheck */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9801FF5A2BEFA99E00198FC1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAppCheck;
