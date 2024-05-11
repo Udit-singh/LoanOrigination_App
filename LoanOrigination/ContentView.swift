@@ -29,25 +29,22 @@ struct LoanApplication: Identifiable, Codable {
     var status: String // Change status to var for dynamic updates
 }
 
-
 struct ContentView: View {
     @State private var isAuthenticated = false
     @State private var currentUser: User?
-    @State private var fullName = ""
-    @State private var loanAmount = ""
-    @State private var purpose = ""
-    @State private var showingReviewPage = false // State to control navigation
     @State private var loanApplications: [LoanApplication] = []
+    @State private var showingLoanApplication = false // State to control showing loan application view
 
-    // Load saved loan applications when the app starts
+    // Load saved loan applications and set isAuthenticated to false when the app starts
     init() {
         loadLoanApplications()
+        isAuthenticated = false // Set to false to require login every time the app starts
     }
 
     var body: some View {
         NavigationView {
             if isAuthenticated {
-                DashboardView(currentUser: $currentUser, loanApplications: $loanApplications)
+                DashboardView(currentUser: $currentUser, loanApplications: $loanApplications, showingLoanApplication: $showingLoanApplication)
                     .navigationTitle("Dashboard")
             } else {
                 AuthenticationView(isAuthenticated: $isAuthenticated, currentUser: $currentUser)
@@ -55,6 +52,9 @@ struct ContentView: View {
             }
         }
         .accentColor(.primaryBlue)
+        .sheet(isPresented: $showingLoanApplication) {
+            LoanApplicationView(loanApplications: $loanApplications)
+        }
     }
     
     // Save loan applications to UserDefaults
@@ -79,12 +79,75 @@ struct ContentView: View {
     }
 }
 
+struct AuthenticationView: View {
+    @Binding var isAuthenticated: Bool
+    @Binding var currentUser: User?
+    @State private var showingLoginPage = false // State to control navigation
+    
+    var body: some View {
+        VStack {
+            Text("Welcome to Loan App")
+                .font(.appTitleFont(size: 24))
+                .foregroundColor(.primaryBlue)
+                .padding(.top, 20)
+            
+            Button(action: {
+                showingLoginPage = true // Show login page
+            }) {
+                Text("Login")
+                    .font(.appSubtitleFont(size: 18))
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.primaryBlue)
+                    .cornerRadius(8)
+            }
+            .sheet(isPresented: $showingLoginPage) {
+                LoginPageView(isAuthenticated: $isAuthenticated, currentUser: $currentUser)
+            }
+        }
+        .padding()
+    }
+}
+
+struct LoginPageView: View {
+    @Binding var isAuthenticated: Bool
+    @Binding var currentUser: User?
+    @State private var username = ""
+    @State private var password = ""
+    
+    var body: some View {
+        VStack {
+            TextField("Username", text: $username)
+                .padding()
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+            
+            SecureField("Password", text: $password)
+                .padding()
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+            
+            Button(action: {
+                // Implement login logic here
+                // For demonstration, let's simulate login success
+                currentUser = User(id: UUID(), username: username)
+                isAuthenticated = true
+            }) {
+                Text("Login")
+                    .font(.appSubtitleFont(size: 18))
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.primaryBlue)
+                    .cornerRadius(8)
+            }
+        }
+        .padding()
+    }
+}
 
 struct DashboardView: View {
     @Binding var currentUser: User?
     @Binding var loanApplications: [LoanApplication]
+    @Binding var showingLoanApplication: Bool // Add binding for showing loan application view
     @State private var selectedApplication: LoanApplication?
-    @State private var showingLoanApplication = false
     
     var body: some View {
         VStack {
@@ -94,7 +157,7 @@ struct DashboardView: View {
                 .padding(.top, 20)
             
             Button(action: {
-                showingLoanApplication.toggle()
+                showingLoanApplication.toggle() // Toggle the state to show/hide the loan application view
             }) {
                 Text("Apply for Loan")
                     .font(.appSubtitleFont(size: 18))
@@ -102,9 +165,6 @@ struct DashboardView: View {
                     .padding()
                     .background(Color.primaryBlue)
                     .cornerRadius(8)
-            }
-            .sheet(isPresented: $showingLoanApplication) {
-                LoanApplicationView(loanApplications: $loanApplications)
             }
             
             List(loanApplications) { application in
@@ -131,40 +191,38 @@ struct DashboardView: View {
     }
 }
 
-
 struct LoanApplicationView: View {
     @Binding var loanApplications: [LoanApplication]
     @State private var fullName = ""
     @State private var loanAmount = ""
     @State private var purpose = ""
-    @State private var showingReviewPage = false // State to control navigation
     
     var body: some View {
         VStack {
+            Text("Loan Application Form")
+                .font(.appTitleFont(size: 24))
+                .foregroundColor(.primaryBlue)
+                .padding(.top, 20)
+            
             TextField("Full Name", text: $fullName)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
+                .textFieldStyle(RoundedBorderTextFieldStyle())
             
             TextField("Loan Amount", text: $loanAmount)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
-                .keyboardType(.numberPad)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
             
             TextField("Purpose", text: $purpose)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
+                .textFieldStyle(RoundedBorderTextFieldStyle())
             
             Button(action: {
-                // Validate form data
-                guard !fullName.isEmpty, !loanAmount.isEmpty, !purpose.isEmpty else {
-                    return // Add proper validation logic
-                }
-                
-                // Save data to local storage
+                // Create a new loan application and add it to the list
                 let newApplication = LoanApplication(id: UUID(), fullName: fullName, loanAmount: loanAmount, purpose: purpose, status: "Pending")
                 loanApplications.append(newApplication)
                 
-                showingReviewPage = true // Show review page
+                // Save loan applications to UserDefaults
+                saveLoanApplications()
             }) {
                 Text("Submit")
                     .font(.appSubtitleFont(size: 18))
@@ -173,12 +231,15 @@ struct LoanApplicationView: View {
                     .background(Color.primaryBlue)
                     .cornerRadius(8)
             }
-            .padding()
         }
         .padding()
-        .sheet(isPresented: $showingReviewPage) {
-            // Display review page
-            ReviewPageView(fullName: $fullName, loanAmount: $loanAmount, purpose: $purpose)
+    }
+    
+    // Save loan applications to UserDefaults
+    private func saveLoanApplications() {
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(loanApplications) {
+            UserDefaults.standard.set(encoded, forKey: "loanApplications")
         }
     }
 }
@@ -212,67 +273,18 @@ struct LoanApplicationDetailsView: View {
     }
 }
 
-struct AuthenticationView: View {
-    @Binding var isAuthenticated: Bool
-    @Binding var currentUser: User?
-    
-    var body: some View {
-        VStack {
-            Text("Welcome to Loan App")
-                .font(.appTitleFont(size: 24))
-                .foregroundColor(.primaryBlue)
-                .padding(.top, 20)
-            
-            Button(action: {
-                // Simulate login
-                currentUser = dummyUser
-                isAuthenticated = true
-            }) {
-                Text("Login")
-                    .font(.appSubtitleFont(size: 18))
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.primaryBlue)
-                    .cornerRadius(8)
-            }
-        }
-        .padding()
-    }
-}
-
-struct ReviewPageView: View {
-    @Binding var fullName: String
-    @Binding var loanAmount: String
-    @Binding var purpose: String
-    
-    var body: some View {
-        VStack {
-            Text("Review Page")
-                .font(.appTitleFont(size: 24))
-                .foregroundColor(.primaryBlue)
-                .padding(.top, 20)
-            
-            Text("Full Name: \(fullName)")
-                .font(.appSubtitleFont(size: 16))
-                .padding()
-            Text("Loan Amount: \(loanAmount)")
-                .font(.appSubtitleFont(size: 16))
-                .padding()
-            Text("Purpose: \(purpose)")
-                .font(.appSubtitleFont(size: 16))
-                .padding()
-            
-            Spacer()
-        }
-        .padding()
-    }
-}
-
 // Dummy data
 let dummyUser = User(id: UUID(), username: "user123")
+
+var dummyLoanApplications: [LoanApplication] = [
+    LoanApplication(id: UUID(), fullName: "John Doe", loanAmount: "10000", purpose: "Home Renovation", status: "Pending"),
+    LoanApplication(id: UUID(), fullName: "Jane Smith", loanAmount: "5000", purpose: "Car Purchase", status: "Approved"),
+    LoanApplication(id: UUID(), fullName: "Alice Johnson", loanAmount: "20000", purpose: "Debt Consolidation", status: "Rejected")
+]
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
     }
 }
+
