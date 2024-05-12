@@ -431,6 +431,12 @@ struct DashboardView: View {
     @Binding var loanApplications: [LoanApplication]
     @Binding var showingLoanApplication: Bool
     @State private var selectedApplication: LoanApplication?
+    @State private var showingAboutPage = false
+    
+    // Function to handle opening the About page
+        private func openAboutPage() {
+            showingAboutPage = true
+        }
 
     func getStatus(for application: LoanApplication) -> String {
         if let index = loanApplications.firstIndex(where: { $0.id == application.id }) {
@@ -445,6 +451,19 @@ struct DashboardView: View {
                 .font(.appTitleFont(size: 20))
                 .foregroundColor(.primaryBlue)
                 .padding(.top, 20)
+            
+            
+            Button(action: {
+                            openAboutPage()
+                        }) {
+                            Image(systemName: "info.circle")
+                                .font(.title)
+                                .foregroundColor(.white)
+                        }
+                        .padding()
+                        .sheet(isPresented: $showingAboutPage) {
+                            AboutView()
+                        }
             
             Button(action: {
                 self.showingLoanApplication.toggle()
@@ -725,6 +744,55 @@ struct LoanApplicationDetailsView: View {
                 .foregroundColor(.primary)
         }
                             )};
+}
+
+
+struct AboutView: View {
+    var body: some View {
+        VStack {
+            Text("About Loan App")
+                .font(.title)
+                .padding()
+            
+            Text("The Loan Origination App is a mobile application that allows users to apply for loans conveniently from their smartphones. The app streamlines the loan application process, making it easier for individuals to access credit facilities, especially those who may have limited access to traditional banking services..")
+                .padding()
+            
+            Divider()
+            
+            Text("Developers:")
+                .font(.title2)
+                .padding()
+            
+            DeveloperRow(name: "Udit Singh")
+            DeveloperRow(name: "Kumaravel")
+            DeveloperRow(name: "Shiva Ganesh")
+            DeveloperRow(name: "Deepak Puram")
+            
+            Spacer()
+        }
+        .navigationBarTitle("About")
+    }
+}
+
+struct DeveloperRow: View {
+    var name: String
+    
+    var body: some View {
+        HStack {
+            Image(systemName: "person.circle.fill")
+                .font(.title)
+            Text(name)
+                .font(.headline)
+                .padding()
+            Spacer()
+        }
+    }
+}
+
+struct AboutView_Previews: PreviewProvider {
+    static var previews: some View {
+        AboutView()
+    }
 }
 
 // Dummy data
