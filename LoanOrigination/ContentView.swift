@@ -30,6 +30,8 @@ struct LoanApplication: Identifiable, Codable {
     var status: String // Change status to var for dynamic updates
 }
 
+
+
 struct ContentView: View {
     @State private var isAuthenticated = false
     @State private var currentUser: User?
@@ -133,35 +135,61 @@ struct AuthenticationView: View {
 struct SignUpPageView: View {
     @Binding var isAuthenticated: Bool
     @Binding var currentUser: User?
+    @Environment(\.dismiss) var dismiss
     @State private var fullName = ""
     @State private var username = ""
     @State private var dateOfBirth = Date()
     @State private var password = ""
+    @State private var confirmPassword = ""
     @State private var showPassword = false // State to toggle password visibility
     @State private var showError = false // State to control error message visibility
-
+    @State private var passwordStrength = "" // State to store password strength indicator
+    @State private var agreedToTerms = false // State to track agreement to terms
+    @State private var isUsernameAvailable = false // State to track username availability
+    @State private var isUnder18 = false
+    @State private var passwordsMatchError = false
+    @State private var showConfirmPassword = false
+    
     var body: some View {
         VStack {
             TextField("Full Name", text: $fullName)
                 .padding()
                 .textFieldStyle(RoundedBorderTextFieldStyle())
             
-            TextField("Username", text: $username)
-                .padding()
-                .textFieldStyle(RoundedBorderTextFieldStyle())
+            TextField("Username", text: $username, onEditingChanged: { _ in
+                // Implement username availability check here
+                
+                if(!username.isEmpty){
+                    isUsernameAvailable = checkUsernameAvailability(username)
+                }
+            })
+            .padding()
+            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .alert(isPresented: Binding<Bool>(
+                get: { isUsernameAvailable },
+                set: { _ in isUsernameAvailable = false })) {
+                Alert(title: Text("Username Availability"), message: Text(isUsernameAvailable ? "Username is available" : "Username is already taken"), dismissButton: .default(Text("OK")))
+            }
             
             DatePicker("Date of Birth", selection: $dateOfBirth, displayedComponents: .date)
-                .padding()
+                            .padding()
+                            .onChange(of: dateOfBirth) { newValue, newValue in
+                                isUnder18 = calculateAge(birthDate: newValue) < 18
+                            }
             
             HStack {
                 if showPassword {
-                    TextField("Password", text: $password)
-                        .padding()
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    TextField("Password", text: $password, onEditingChanged: { _ in
+                        passwordStrength = passwordStrengthIndicator(password)
+                    })
+                    .padding()
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
                 } else {
-                    SecureField("Password", text: $password)
-                        .padding()
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    SecureField("Password", text: $password, onCommit: {
+                        passwordStrength = passwordStrengthIndicator(password)
+                    })
+                    .padding()
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
                 }
                 
                 Button(action: {
@@ -173,10 +201,47 @@ struct SignUpPageView: View {
                 }
             }
             
+            Text(passwordStrength)
+                .foregroundColor(passwordStrengthColor(passwordStrength))
+                .padding(.leading)
+            
+            
+            if showPassword {
+                TextField("Confirm Password", text: $confirmPassword)
+                                        .padding()
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
+            } else {
+                SecureField("Confirm Password", text: $confirmPassword)
+                                        .padding()
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
+            }
+        
+
+            if passwordsMatchError {
+                Text("Passwords do not match")
+                    .foregroundColor(.red)
+                    .font(.footnote)
+                    .padding(.trailing, 8)
+                    .padding(.top, 2)
+            }
+            
+            HStack {
+                CheckBoxView(isChecked: $agreedToTerms)
+                Text("I agree to the terms of service and privacy policy.")
+                    .foregroundColor(.primary)
+            }
+            .padding(.horizontal)
+
             Button(action: {
+                              
+                let (passwordsMatch, passwordStrength) = validatePasswords(password: password, confirmPassword: confirmPassword, isPasswordVisible: showPassword)
+
                 // Validate fields
-                if fullName.isEmpty || username.isEmpty || password.isEmpty {
-                    showError = true
+                if fullName.isEmpty || username.isEmpty || password.isEmpty || confirmPassword.isEmpty || !agreedToTerms {
+                       showError = true
+                    if !passwordsMatch {
+                                passwordsMatchError = true
+                            }
                     return
                 }
                 
@@ -184,6 +249,7 @@ struct SignUpPageView: View {
                 // For demonstration, let's simulate sign-up success by logging in
                 currentUser = User(id: UUID(), username: username)
                 isAuthenticated = true
+                
             }) {
                 Text("Sign Up")
                     .font(.appSubtitleFont(size: 18))
@@ -193,12 +259,121 @@ struct SignUpPageView: View {
                     .cornerRadius(8)
             }
             .alert(isPresented: $showError) {
-                Alert(title: Text("Error"), message: Text("Please fill out all required fields"), dismissButton: .default(Text("OK")))
-            }
+                            let errorMessage = "Please fill out all required fields"
+                                + (isUnder18 ? ", ensure you are at least 18 years old" : "")
+                                + (!agreedToTerms ? ", and agree to the terms of service." : "")
+                                + (passwordStrength != "Strong" ? ", and use a strong password." : "")
+                            return Alert(title: Text("Error"), message: Text(errorMessage), dismissButton: .default(Text("OK")))
+                        }
         }
         .padding()
     }
+    
+    private func validatePasswords(password: String, confirmPassword: String, isPasswordVisible: Bool) -> (isMatch: Bool, strength: String) {
+        // Check if passwords match
+        let passwordsMatch = password == confirmPassword
+        
+        // Determine strength of password
+        let passwordStrength = passwordStrengthIndicator(password)
+        
+        return (passwordsMatch, passwordStrength)
+    }
+
+    // Function to check username availability (dummy implementation)
+    private func checkUsernameAvailability(_ username: String) -> Bool {
+        // Dummy implementation: assume username is always available
+        return true
+    }
+
+    // Function to calculate password strength
+    private func passwordStrengthIndicator(_ password: String) -> String {
+        let passwordLength = password.count
+        switch passwordLength {
+        case 0:
+            return ""
+        case 1..<8:
+            return "Weak"
+        case 8..<12:
+            return "Moderate"
+        default:
+            return "Strong"
+        }
+    }
+
+    // Function to determine color based on password strength
+    private func passwordStrengthColor(_ strength: String) -> Color {
+        switch strength {
+        case "Weak":
+            return .red
+        case "Moderate":
+            return .orange
+        case "Strong":
+            return .green
+        default:
+            return .primary
+        }
+    }
 }
+
+
+struct PasswordToggleModifier: ViewModifier {
+    @Binding var isPasswordVisible: Bool
+    
+    func body(content: Content) -> some View {
+        HStack {
+            content
+            
+            Button(action: {
+                isPasswordVisible.toggle()
+            }) {
+                Image(systemName: isPasswordVisible ? "eye.fill" : "eye.slash.fill")
+                    .foregroundColor(.secondary)
+                    .padding(.trailing, 8)
+            }
+        }
+    }
+}
+
+// Function to calculate password strength
+private func passwordStrengthIndicator(_ password: String) -> String {
+    let passwordLength = password.count
+    let hasUppercase = password.rangeOfCharacter(from: .uppercaseLetters) != nil
+    let hasLowercase = password.rangeOfCharacter(from: .lowercaseLetters) != nil
+    let hasNumbers = password.rangeOfCharacter(from: .decimalDigits) != nil
+    let hasSpecialCharacters = password.rangeOfCharacter(from: CharacterSet(charactersIn: "!@#$%^&*()-_=+[{]}\\|;:'\",<.>/?")) != nil
+    
+    if passwordLength < 8 || !hasUppercase || !hasLowercase || !hasNumbers || !hasSpecialCharacters {
+        return "Weak"
+    } else if passwordLength < 12 {
+        return "Moderate"
+    } else {
+        return "Strong"
+    }
+}
+
+
+    
+    // Function to determine color based on password strength
+    private func passwordStrengthColor(_ strength: String) -> Color {
+        switch strength {
+        case "Weak":
+            return .red
+        case "Moderate":
+            return .orange
+        case "Strong":
+            return .green
+        default:
+            return .primary
+        }
+    }
+    
+private func calculateAge(birthDate: Date) -> Int {
+       let calendar = Calendar.current
+       let currentDate = Date()
+       let ageComponents = calendar.dateComponents([.year], from: birthDate, to: currentDate)
+       let age = ageComponents.year ?? 0
+       return age
+   }
 
 
 struct CheckBoxView: View {
