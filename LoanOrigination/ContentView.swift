@@ -159,12 +159,20 @@ struct LoginPageView: View {
     }
 }
 
+
 struct DashboardView: View {
     @Binding var currentUser: User?
     @Binding var loanApplications: [LoanApplication]
-    @Binding var showingLoanApplication: Bool // Add binding for showing loan application view
+    @Binding var showingLoanApplication: Bool
     @State private var selectedApplication: LoanApplication?
-    
+
+    func getStatus(for application: LoanApplication) -> String {
+        if let index = loanApplications.firstIndex(where: { $0.id == application.id }) {
+            return loanApplications[index].status
+        }
+        return "Pending"
+    }
+
     var body: some View {
         VStack {
             Text("Loan Application Dashboard")
@@ -173,7 +181,7 @@ struct DashboardView: View {
                 .padding(.top, 20)
             
             Button(action: {
-                showingLoanApplication.toggle() // Toggle the state to show/hide the loan application view
+                self.showingLoanApplication.toggle()
             }) {
                 Text("Apply for Loan")
                     .font(.appSubtitleFont(size: 18))
@@ -182,7 +190,8 @@ struct DashboardView: View {
                     .background(Color.primaryBlue)
                     .cornerRadius(8)
             }
-            
+            .padding()
+
             List(loanApplications) { application in
                 VStack(alignment: .leading) {
                     Text("Applicant: \(application.fullName)")
@@ -193,7 +202,7 @@ struct DashboardView: View {
                         .font(.appSubtitleFont(size: 16))
                     Text("Credit Score: \(application.creditScore)")
                         .font(.appSubtitleFont(size: 16))
-                    Text("Status: \(application.status)")
+                    Text("Status: \(self.getStatus(for: application))")
                         .font(.appSubtitleFont(size: 16))
                 }
                 .padding()
@@ -202,12 +211,40 @@ struct DashboardView: View {
                 }
             }
             .sheet(item: $selectedApplication) { application in
-                LoanApplicationDetailsView(application: application)
+                let index = getIndex(for: application)
+                LoanApplicationDetailsView(application: $loanApplications[index], status: self.$loanApplications[index].status)
             }
+
         }
         .padding()
+        .navigationBarTitle("Loan Application Dashboard")
+    }
+
+    func getIndex(for application: LoanApplication) -> Int {
+        if let index = loanApplications.firstIndex(where: { $0.id == application.id }) {
+            return index
+        }
+        return 0 // Default value to return if index is not found
     }
 }
+
+struct DashboardView_Previews: PreviewProvider {
+    static var previews: some View {
+        // Create an empty array of LoanApplication objects
+        let loanApplications: [LoanApplication] = []
+        
+        // Pass the loanApplications array to the DashboardView in the preview
+        return DashboardView(currentUser: .constant(nil), loanApplications: .constant(loanApplications), showingLoanApplication: .constant(false))
+    }
+}
+
+
+//
+//struct DashboardView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        return DashboardView(currentUser: .constant(nil), loanApplications: .constant(LoanApplication), showingLoanApplication: .constant(false))
+//    }
+//}
 
 struct LoanApplicationView: View {
     @Binding var loanApplications: [LoanApplication]
@@ -355,7 +392,9 @@ struct ErrorModifier: ViewModifier {
 
 
 struct LoanApplicationDetailsView: View {
-    @State var application: LoanApplication
+    @Binding var application: LoanApplication
+    @Binding var status: String
+    @Environment(\.presentationMode) var presentationMode
     
     func takeDecision() {
             if application.loanAmount <= "100000" && application.creditScore >= "500" && application.creditScore <= "800" {
@@ -369,7 +408,7 @@ struct LoanApplicationDetailsView: View {
         VStack {
             Text("Loan Application Details")
                 .font(.appTitleFont(size: 24))
-                .foregroundColor(.primaryBlue)
+                .foregroundColor(.blue)
                 .padding(.top, 20)
             
             Text("Applicant: \(application.fullName)")
@@ -402,7 +441,14 @@ struct LoanApplicationDetailsView: View {
             Spacer()
         }
         .padding()
-    }
+        .navigationBarItems(trailing: Button(action: {
+            self.presentationMode.wrappedValue.dismiss()
+
+        }) {
+            Text("Close")
+                .foregroundColor(.primary)
+        }
+                            )};
 }
 
 // Dummy data
