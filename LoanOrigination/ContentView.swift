@@ -451,19 +451,7 @@ struct DashboardView: View {
                 .font(.appTitleFont(size: 20))
                 .foregroundColor(.primaryBlue)
                 .padding(.top, 20)
-            
-            
-            Button(action: {
-                            openAboutPage()
-                        }) {
-                            Image(systemName: "info.circle")
-                                .font(.title)
-                                .foregroundColor(.white)
-                        }
-                        .padding()
-                        .sheet(isPresented: $showingAboutPage) {
-                            AboutView()
-                        }
+
             
             Button(action: {
                 self.showingLoanApplication.toggle()
@@ -476,6 +464,18 @@ struct DashboardView: View {
                     .cornerRadius(8)
             }
             .padding()
+            
+            Button(action: {
+                            openAboutPage()
+                        }) {
+                            Image(systemName: "info.circle")
+                                .font(.title)
+                                .foregroundColor(.white)
+                        }
+                        .padding()
+                        .sheet(isPresented: $showingAboutPage) {
+                            AboutView()
+                        }
 
             List(loanApplications) { application in
                 VStack(alignment: .leading) {
@@ -809,4 +809,5 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+
 
