@@ -84,6 +84,7 @@ struct AuthenticationView: View {
     @Binding var isAuthenticated: Bool
     @Binding var currentUser: User?
     @State private var showingLoginPage = false // State to control navigation
+    @State private var showingSignUpPage = false
     
     var body: some View {
         VStack {
@@ -96,8 +97,10 @@ struct AuthenticationView: View {
                 showingLoginPage = true // Show login page
             }) {
                 Text("Login")
-                    .font(.appSubtitleFont(size: 18))
-                    .foregroundColor(.white)
+                    .font(.appSubtitleFont(size: 28))
+                    .foregroundColor(.blue)
+                    .bold()
+                    .underline()
                     .padding()
                     .background(Color.primaryBlue)
                     .cornerRadius(8)
@@ -105,10 +108,98 @@ struct AuthenticationView: View {
             .sheet(isPresented: $showingLoginPage) {
                 LoginPageView(isAuthenticated: $isAuthenticated, currentUser: $currentUser)
             }
+            
+            Button(action: {
+                            showingSignUpPage = true // Show sign-up page
+                        }) {
+                            Text("Sign Up")
+                                .font(.appSubtitleFont(size: 28))
+                                .foregroundColor(.blue)
+                                .bold()
+                                .underline()
+                                .padding()
+                                .background(Color.primaryBlue)
+                                .cornerRadius(8)
+                        }
+                        .sheet(isPresented: $showingSignUpPage) {
+                            SignUpPageView(isAuthenticated: $isAuthenticated, currentUser: $currentUser)
+                        }
+            
         }
         .padding()
     }
 }
+
+struct SignUpPageView: View {
+    @Binding var isAuthenticated: Bool
+    @Binding var currentUser: User?
+    @State private var fullName = ""
+    @State private var username = ""
+    @State private var dateOfBirth = Date()
+    @State private var password = ""
+    @State private var showPassword = false // State to toggle password visibility
+    @State private var showError = false // State to control error message visibility
+
+    var body: some View {
+        VStack {
+            TextField("Full Name", text: $fullName)
+                .padding()
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+            
+            TextField("Username", text: $username)
+                .padding()
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+            
+            DatePicker("Date of Birth", selection: $dateOfBirth, displayedComponents: .date)
+                .padding()
+            
+            HStack {
+                if showPassword {
+                    TextField("Password", text: $password)
+                        .padding()
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                } else {
+                    SecureField("Password", text: $password)
+                        .padding()
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                }
+                
+                Button(action: {
+                    showPassword.toggle()
+                }) {
+                    Image(systemName: showPassword ? "eye.fill" : "eye.slash.fill")
+                        .foregroundColor(.secondary)
+                        .padding(.trailing, 8)
+                }
+            }
+            
+            Button(action: {
+                // Validate fields
+                if fullName.isEmpty || username.isEmpty || password.isEmpty {
+                    showError = true
+                    return
+                }
+                
+                // Implement sign-up logic here
+                // For demonstration, let's simulate sign-up success by logging in
+                currentUser = User(id: UUID(), username: username)
+                isAuthenticated = true
+            }) {
+                Text("Sign Up")
+                    .font(.appSubtitleFont(size: 18))
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.primaryBlue)
+                    .cornerRadius(8)
+            }
+            .alert(isPresented: $showError) {
+                Alert(title: Text("Error"), message: Text("Please fill out all required fields"), dismissButton: .default(Text("OK")))
+            }
+        }
+        .padding()
+    }
+}
+
 
 struct CheckBoxView: View {
     @Binding var isChecked: Bool
@@ -175,8 +266,8 @@ struct DashboardView: View {
 
     var body: some View {
         VStack {
-            Text("Loan Application Dashboard")
-                .font(.appTitleFont(size: 24))
+            Text("Loan App Dashboard")
+                .font(.appTitleFont(size: 20))
                 .foregroundColor(.primaryBlue)
                 .padding(.top, 20)
             
@@ -217,7 +308,7 @@ struct DashboardView: View {
 
         }
         .padding()
-        .navigationBarTitle("Loan Application Dashboard")
+        .navigationBarTitle("Loan App Dashboard")
     }
 
     func getIndex(for application: LoanApplication) -> Int {
@@ -273,10 +364,11 @@ struct LoanApplicationView: View {
                 }
                 .padding(.trailing)
             }
-            Text("Loan Application Form")
+            Text("Apply For Loan")
                 .font(.appTitleFont(size: 24))
-                .foregroundColor(.primaryBlue)
+                .foregroundColor(.blue)
                 .padding(.top, 20)
+
                 
             TextField("Full Name*", text: $fullName)
                 .padding()
@@ -318,10 +410,13 @@ struct LoanApplicationView: View {
                         
                         HStack {
                             CheckBoxView(isChecked: $agreedToTerms)
-                            Text("I agree to the terms and conditions.")
-                                .padding(.leading, 5)
+                            Text(agreedToTerms ? "You have to agree the terms and conditions." : "Please agree to the terms and conditions.")
+                                   .padding(.leading, 5)
                         }
+            
                         .padding()
+            
+            
             
             Button(action: {
                 // Validate fields
@@ -339,7 +434,7 @@ struct LoanApplicationView: View {
                 }
                 
                 // Check if all fields are filled
-                if !fullName.isEmpty && !loanAmount.isEmpty && !purpose.isEmpty && !creditScore.isEmpty {
+                if !fullName.isEmpty && !loanAmount.isEmpty && !purpose.isEmpty && !creditScore.isEmpty && agreedToTerms {
                     // Create a new loan application and add it to the list
                     let newApplication = LoanApplication(id: UUID(), fullName: fullName, loanAmount: loanAmount, purpose: purpose, creditScore: creditScore, status: "Pending")
                     loanApplications.append(newApplication)
@@ -349,15 +444,19 @@ struct LoanApplicationView: View {
                     
                     // Dismiss the view
                     isPresented = false
+                    
+                    dismiss()
+                }
+                else{
+                    agreedToTerms = false;
                 }
             }) {
                 Text("Submit")
-                    .font(.appSubtitleFont(size: 18))
+                    .font(.appSubtitleFont(size: 24))
                     .foregroundColor(.white)
-                    .padding()
-                    .background(Color.primaryBlue)
+                    .background(Color.blue)
                     .cornerRadius(8)
-            }
+            }.buttonStyle(.borderedProminent)
         }
         .padding()
     }
@@ -394,6 +493,7 @@ struct ErrorModifier: ViewModifier {
 struct LoanApplicationDetailsView: View {
     @Binding var application: LoanApplication
     @Binding var status: String
+    @Environment(\.dismiss) var dismiss
     @Environment(\.presentationMode) var presentationMode
     
     func takeDecision() {
@@ -429,6 +529,7 @@ struct LoanApplicationDetailsView: View {
             
             Button(action: {
                 self.takeDecision()
+                dismiss()
                        }) {
                            Text("Take Decision")
                                .padding()
